@@ -1,6 +1,6 @@
-package healthcare.repository;
+package com.healthcaremanagement.repository;
 
-import healthcare.model.Patient;
+import com.healthcaremanagement.model.Patient;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -9,7 +9,7 @@ import java.util.List;
 
 public class PatientRepositoryImpl{
 
-    private SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory;
 
     public PatientRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
@@ -18,7 +18,7 @@ public class PatientRepositoryImpl{
     public void createPatient(Patient patient) {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
-            session.save(patient);
+            session.persist(patient);
             transaction.commit();
         }
     }
@@ -32,7 +32,7 @@ public class PatientRepositoryImpl{
     public void updatePatient(Patient patient) {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
-            session.update(patient);
+            session.merge(patient);
             transaction.commit();
         }
     }
@@ -42,7 +42,7 @@ public class PatientRepositoryImpl{
             Transaction transaction = session.beginTransaction();
             Patient patient = session.get(Patient.class, patientId);
             if (patient != null) {
-                session.delete(patient);
+                session.remove(patient);
             }
             transaction.commit();
         }

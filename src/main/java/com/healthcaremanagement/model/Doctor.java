@@ -1,4 +1,4 @@
-package com.santhi.model;
+package com.healthcaremanagement.model;
 
 import jakarta.persistence.*;
 import lombok.*;

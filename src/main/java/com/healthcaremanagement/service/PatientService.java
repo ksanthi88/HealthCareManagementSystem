@@ -1,7 +1,8 @@
-package healthcare.service;
+package com.healthcaremanagement.service;
 
-import healthcare.model.Patient;
-import healthcare.repository.PatientRepositoryImpl;
+import com.healthcaremanagement.model.Patient;
+import com.healthcaremanagement.repository.PatientRepositoryImpl;
+
 
 import java.util.List;
 

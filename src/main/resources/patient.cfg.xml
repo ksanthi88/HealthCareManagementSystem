@@ -21,7 +21,9 @@
         <property name="hibernate.format_sql">true</property>
 
         <!-- Entity Class Mapping -->
-        <mapping class="com.santhi.model.Patient"/>
+        <mapping class="com.healthcaremanagement.model.Doctor"/>
+        <mapping class="com.healthcaremanagement.model.Appointment"/>
+        <mapping class="com.healthcaremanagement.model.Patient"/>
 
     </session-factory>
 </hibernate-configuration>
