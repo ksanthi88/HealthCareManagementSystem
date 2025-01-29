@@ -15,10 +15,13 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="AppointmentId")
     private int appointmentId;
+
     @JoinColumn(name="PatientId")//foreign key from patient
     private int patientId;
+
     @JoinColumn(name="DoctorId")//foreign Key from doctors
     private int doctorId;
+
    @Column(name="AppointmentDate")
     private String appointmentDate;
     @Column(name="Notes")

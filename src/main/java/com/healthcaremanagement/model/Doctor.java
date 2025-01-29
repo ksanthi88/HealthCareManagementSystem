@@ -3,6 +3,9 @@ package com.healthcaremanagement.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -23,5 +26,7 @@ public class Doctor {
     private  String specialty;
     @Column(name="Email")
     private String email;
+//    @OneToMany(mappedBy = "Doctors",cascade = CascadeType.ALL)//one doctor having multiple appointments
+//    private List<Appointment> appointmentList= new ArrayList<>();
 
 }
