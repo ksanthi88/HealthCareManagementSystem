@@ -20,24 +20,20 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         SessionFactory sessionFactory = new Configuration().configure("patient.cfg.xml").buildSessionFactory();
-        //Intialize Patinet service class
-        PatientRepositoryImpl patientRepository = new PatientRepositoryImpl(sessionFactory);
-        PatientService patientService = new PatientService(patientRepository);
-        //Intialize Doctor service class
-        DoctorRepositoryImpl doctorRepository = new DoctorRepositoryImpl(sessionFactory);
-        DoctorService doctorService = new DoctorService(doctorRepository);
-        //Intialize Appointment service class
-        AppointmentRepositoryImpl appointmentRepository = new AppointmentRepositoryImpl(sessionFactory);
-        AppointmentService appointmentService = new AppointmentService(appointmentRepository);
-        //intialize scanner
+       //Initialize all services
+        PatientService patientService=new PatientService(new PatientRepositoryImpl(sessionFactory));
+        AppointmentService appointmentService=new AppointmentService(new AppointmentRepositoryImpl(sessionFactory));
+        DoctorService doctorService=new DoctorService(new DoctorRepositoryImpl(sessionFactory));
+        //Initialize scanner
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("Welcome to HealthCare Management System");
-            System.out.println("1. Manage Patients");
-            System.out.println("2. Manage Doctors");
+            System.out.println("1. Manage Doctors");
+            System.out.println("2. Manage Patients");
             System.out.println("3. Manage Appointments");
+            System.out.println("4. Exit");
             System.out.println("Please enter your choice");
-            int choice = scanner.nextInt();
+            int choice = getValidChoice(scanner);
             switch (choice) {
                 case 1:
                     manageDoctors(doctorService, scanner);
@@ -59,19 +55,35 @@ public class Main {
 
         }
     }
-
-    private static void manageDoctors(DoctorService doctorService, Scanner scanner) {
+    private static int getValidChoice(Scanner scanner) {
+        int choice;
         while (true) {
+            System.out.print("Enter your choice (number only): ");
+            if (scanner.hasNextInt()) {
+                choice = scanner.nextInt();
+                scanner.nextLine(); // Consume newline
+                return choice; // Valid choice, return it
+            } else {
+                System.out.println("Invalid input! Please enter a number.");
+                scanner.next(); // Discard invalid input
+            }
+        }
+    }
+    private static void manageDoctors(DoctorService doctorService, Scanner scanner) {
+        boolean exists = false;
+        while (!exists) {
+            System.out.println("Welcome to Doctor Management");
             System.out.println("1. Create Doctor");
             System.out.println("2. Read Doctor");
             System.out.println("3. Update Doctor");
             System.out.println("4. Delete Doctor");
-            System.out.println("5.Exit");
+            System.out.println("5. Return to Main Menu");
+            System.out.println("0. Exit Doctor Management ");
+            System.out.println("Please enter your choice");
 
-            int choice = scanner.nextInt();
-            scanner.nextLine();
 
-            try {
+            int choice = getValidChoice(scanner);
+
                 switch (choice) {
                     case 1:
                         //create a doctor
@@ -133,31 +145,39 @@ public class Main {
                         if (doctor != null) {
                             doctorService.deleteDoctorById(doctorId);
                         } else {
-                            System.out.println("Patient not found.");
+                            System.out.println("Doctor not found.");
                         }
                         System.out.println("Doctor deleted successfully.");
                         break;
                     case 5:
+                        System.out.println("Returning to Main Menu");
                         return;
+                        case 0:
+                            System.out.println("Thank you for using HealthCare Management System");
+                            scanner.close();
+                            System.exit(0);
                     default:
                         System.out.println("Invalid choice.");
+
                 }
-            } finally {
-                scanner.close();
             }
         }
-    }
+
 
     private static void managePatients(PatientService patientService, Scanner scanner) {
-        while (true) {
+        boolean exists = false;
+        while (!exists) {
+            System.out.println("Welcome to Patient Management");
             System.out.println("1. Create Patient");
             System.out.println("2. Read Patient");
             System.out.println("3. Update Patient");
             System.out.println("4. Delete Patient");
-            System.out.println("5.Exit");
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-            try {
+            System.out.println("5. Return to main menu");
+            System.out.println("0. Exit Patient Management ");
+            System.out.println("Please enter your choice");
+
+            int choice = getValidChoice(scanner);
+
                 switch (choice) {
                     case 1:
                         Patient newPatient = new Patient();
@@ -224,32 +244,42 @@ public class Main {
                         }
                         break;
                     case 5:
+                        System.out.println("Returning to Main Menu");
                         return;
+                    case 0:
+                        System.out.println("Thank you for using HealthCare Management System");
+                        scanner.close();
+                        System.exit(0);
                     default:
                         System.out.println("Invalid choice.");
                 }
-            } finally {
-                scanner.close();
             }
         }
-    }
+
 
     private static void manageAppointments(AppointmentService appointmentService, Scanner scanner) {
-        while (true) {
+        boolean exits = false;
+        while (!exits) {
+            System.out.println("Welcome to Appointment Management");
             System.out.println("1. Create Appointment");
             System.out.println("2. Read Appointment");
             System.out.println("3. Update Appointment");
             System.out.println("4. Delete Appointment");
-            System.out.println("5. Exit");
-            int choice = scanner.nextInt();
+            System.out.println("5. Return to main menu");
+            System.out.println("0. Exit Appointment Management");
+            System.out.println("Please enter your choice");
+
+            int choice = getValidChoice(scanner);
 
             switch (choice) {
                 case 1://create appointment
                     Appointment newAppointment = new Appointment();
                     System.out.println("Enter New Appointment Patient ID: ");
                     newAppointment.setPatientId(scanner.nextInt());
+                    scanner.nextLine();
                     System.out.println("Enter New Appointment Doctor ID: ");
                     newAppointment.setDoctorId(scanner.nextInt());
+                    scanner.nextLine();
                     System.out.println("Enter New Appointment Date:[yyyy-MM-dd]: ");
                     newAppointment.setAppointmentDate(scanner.nextLine());
                     System.out.println("Enter New Appointment Notes: ");
@@ -280,8 +310,10 @@ public class Main {
                     if (appointment != null) {
                         System.out.println("Enter new Appointment patient Id: ");
                         appointment.setPatientId(scanner.nextInt());
+                        scanner.nextLine();
                         System.out.println("Enter new Appointment doctor Id: ");
                         appointment.setDoctorId(scanner.nextInt());
+                        scanner.nextLine();
                         System.out.println("Enter new Appointment AppointmentDate[yyyy-MM-dd]: ");
                         appointment.setAppointmentDate(scanner.nextLine());
                         System.out.println("Enter new Appointment Notes: ");
@@ -305,9 +337,15 @@ public class Main {
                     }
                     break;
                 case 5:
+                    System.out.print("Return to main menu ");
                     return;
+                    case 0:
+                        System.out.println("Thank you for using HealthCare Management System");
+                        System.exit(0);
+                        scanner.close();
                 default:
                     System.out.println("Invalid choice.");
+
             }
         }
     }
