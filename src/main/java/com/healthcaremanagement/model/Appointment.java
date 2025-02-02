@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name="Appointments")
 @Data
@@ -15,15 +17,15 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="AppointmentId")
     private int appointmentId;
+@ManyToOne
+    @JoinColumn(name="PatientId",nullable = false)//foreign key from patient
+    private Patient patient;
+@ManyToOne
+    @JoinColumn(name="DoctorId",nullable = false)//foreign Key from doctors
+    private Doctor doctor;
 
-    @JoinColumn(name="PatientId")//foreign key from patient
-    private int patientId;
-
-    @JoinColumn(name="DoctorId")//foreign Key from doctors
-    private int doctorId;
-
-   @Column(name="AppointmentDate")
-    private String appointmentDate;
+   @Column(name="AppointmentDate",nullable = false)
+    private LocalDateTime appointmentDate;
     @Column(name="Notes")
     private String notes;
 }

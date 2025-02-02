@@ -26,4 +26,7 @@ public class AppointmentService {
     public List<Appointment> getAllAppointments() {
         return appointmentRepository.getAllAppointments();
     }
+    public boolean hasOtherAppointmentsBetween(int doctorId,int patientId) {
+        return appointmentRepository.hasOtherAppointmentsBetween(doctorId,patientId);
+    }
 }

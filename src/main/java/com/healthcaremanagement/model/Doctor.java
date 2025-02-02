@@ -11,22 +11,32 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@ToString(exclude = "appointmentList")
+@EqualsAndHashCode(exclude = "appointmentList")
 @Table(name="Doctors")
 public class Doctor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="DoctorId")
     private int doctorId;
-    @Column(name="FirstName")
+    @Column(name="FirstName",nullable=false)
     private String firstName;
-    @Column(name="LastName")
+    @Column(name="LastName",nullable=false)
     private String lastName;
-    @Column(name="Specialty")
+    @Column(name="Specialty",nullable=false)
     private  String specialty;
-    @Column(name="Email")
+    @Column(name="Email",nullable = false,unique = true)
     private String email;
-//    @OneToMany(mappedBy = "Doctors",cascade = CascadeType.ALL)//one doctor having multiple appointments
-//    private List<Appointment> appointmentList= new ArrayList<>();
 
+   @OneToMany(mappedBy = "doctor",cascade = CascadeType.ALL,orphanRemoval = true)//one doctor having multiple appointments
+ private List<Appointment> appointmentList= new ArrayList<>();
+
+    @OneToOne(mappedBy = "doctor",cascade = CascadeType.ALL)
+private Office office;
+
+   @ManyToMany(cascade ={ CascadeType.PERSIST}, fetch = FetchType.LAZY)
+   @JoinTable(schema ="healthcareManagementTwoDB",
+           joinColumns = @JoinColumn(name = "DoctorId"),
+           inverseJoinColumns = @JoinColumn(name="PatientID"))
+   private List<Patient> patients;
 }

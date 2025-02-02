@@ -1,6 +1,7 @@
 package com.healthcaremanagement.service;
 
 import com.healthcaremanagement.model.Doctor;
+import com.healthcaremanagement.model.Patient;
 import com.healthcaremanagement.repository.DoctorRepositoryImpl;
 
 import java.util.List;
@@ -24,5 +25,11 @@ public class DoctorService {
     }
    public List<Doctor> getAllDoctors() {
         return doctorRepositoryImpl.getAllDoctors();
+   }
+   public void addPatientToDoctor(int doctorId, Patient patient){
+        doctorRepositoryImpl.addPatientToDoctor(doctorId,patient);
+   }
+   public void removePatientFromDoctor(int doctorId, Patient patient){
+        doctorRepositoryImpl.removePatientFromDoctor(doctorId,patient);
    }
 }

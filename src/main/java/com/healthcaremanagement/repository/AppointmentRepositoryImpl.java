@@ -52,5 +52,16 @@ public class AppointmentRepositoryImpl {
             return session.createQuery("from Appointment",Appointment.class).list();
         }
     }
-
+    public boolean hasOtherAppointmentsBetween(int doctorId, int patientId) {
+        try (Session session = sessionFactory.openSession()) {
+            String query = "SELECT COUNT(a) FROM Appointment a " +
+                    "WHERE a.doctor.doctorId = :doctorId " +
+                    "AND a.patient.patientId = :patientId";
+            Long count = session.createQuery(query, Long.class)
+                    .setParameter("doctorId", doctorId)
+                    .setParameter("patientId", patientId)
+                    .uniqueResult();
+            return count != null && count > 1;
+        }
+    }
 }
