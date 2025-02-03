@@ -32,7 +32,7 @@ public class ManagerClass {
                 new PatientService(new PatientRepositoryImpl(sessionFactory)),
                 scanner
         );
-        this.officeManager = new OfficeManager(new OfficeService(new OfficeRepositoryImpl(sessionFactory)), scanner);
+        this.officeManager = new OfficeManager(new OfficeService(new OfficeRepositoryImpl(sessionFactory)), scanner,new DoctorService(new DoctorRepositoryImpl(sessionFactory)));
     }
     public void healthRunner() {
         while (true) {

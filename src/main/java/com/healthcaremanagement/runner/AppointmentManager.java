@@ -77,6 +77,8 @@ public class AppointmentManager {
 
     private void updateAppointment() {
         Appointment appointment = getAppointmentById();
+        Patient patient = getPatientById();
+        Doctor doctor = getDoctorById();
         if (appointment != null) {
             System.out.println("\n--- Update Appointment ---");
 
@@ -121,6 +123,8 @@ public class AppointmentManager {
             if (!notes.isEmpty()) appointment.setNotes(notes);
 
             appointmentService.updateAppointment(appointment);
+            this.doctorService.addPatientToDoctor(doctor.getDoctorId(), patient);
+            this.patientService.addDoctorToPatient(patient.getPatientId(), doctor.getDoctorId());
             System.out.println("Appointment updated successfully.");
         }
     }

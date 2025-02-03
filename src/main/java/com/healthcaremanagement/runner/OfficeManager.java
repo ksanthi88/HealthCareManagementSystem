@@ -11,11 +11,12 @@ import java.util.Scanner;
 
 public class OfficeManager {
     private final OfficeService officeService;
-    DoctorService doctorService;
+    private final DoctorService doctorService;
     private final Scanner scanner;
 
-    public OfficeManager(OfficeService officeService, Scanner scanner) {
+    public OfficeManager(OfficeService officeService, Scanner scanner,DoctorService doctorService) {
         this.officeService = officeService;
+        this.doctorService = doctorService;
         this.scanner = scanner;
     }
 
