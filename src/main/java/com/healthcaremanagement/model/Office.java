@@ -2,8 +2,10 @@ package com.healthcaremanagement.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 @Entity
+@ToString
 @Data
 @Table(name="Offices")
 public class Office {

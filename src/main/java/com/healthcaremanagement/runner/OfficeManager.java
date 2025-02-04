@@ -74,7 +74,7 @@ public class OfficeManager {
         System.out.print("Enter  Office ID: ");
         int id = getValidChoice();
         Office office = officeService.getOfficeById(id);
-        if (office == null) System.out.println("Patient not found.");
+        if (office == null) System.out.println("Office not found.");
         return office;
     }
 
@@ -90,9 +90,9 @@ public class OfficeManager {
     private void updateOffice() {
         Office office = getOfficeById();
         if (office != null) {
-            System.out.print("Update Office ID: ");
-            office.setOfficeId(getValidChoice());
+            System.out.print("Enter new Office Location: ");
             office.setLocation(scanner.nextLine());
+            System.out.print("Enter new Office Phone: ");
             office.setPhone(scanner.nextLine());
             office.setDoctor(getDoctorById());
             officeService.updateOffice(office);
@@ -110,10 +110,15 @@ public class OfficeManager {
 
     private void listAllOffice() {
         List<Office> offices = officeService.getAllOffices();
-        offices.forEach(System.out::println);
-
+        if (offices.isEmpty()) {
+            System.out.println("No offices found.");
+        } else {
+            System.out.println("\n--- List of All Offices ---");
+            for (Office office : offices) {
+                displayOffice(office);
+            }
+        }
     }
-
     private int getValidChoice() {
         while (true) {
             if (scanner.hasNextInt()) {
