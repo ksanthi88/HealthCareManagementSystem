@@ -14,6 +14,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import javax.print.Doc;
 
@@ -138,5 +140,22 @@ public void testDeleteOfficeById()
     Office deletedOffice = officeService.getOfficeById(office.getOfficeId());
     assertNotNull(office,"Office should exist in the database.");
     assertNull(deletedOffice,"Office should not exist in the database.");
+}
+@ParameterizedTest
+@ValueSource(strings = {"New York", "Los Angeles", "Chicago", "San Francisco"})
+public void toCreateOfficeWithDifferentLocations(String location){
+    Doctor doctor = new Doctor();
+    doctor.setFirstName("Alex");
+    doctor.setLastName("Smith");
+    doctor.setSpecialty("Cardiology");
+    doctor.setEmail("alex@gmail.com");
+    doctorService.createDoctor(doctor);
+Office office = new Office();
+office.setLocation(location);
+office.setPhone("999-006-000");
+office.setDoctor(doctor);
+officeService.createOffice(office);
+assertNotNull(office.getOfficeId(),"Office Id should be created.");
+assertEquals(location,office.getLocation());
 }
 }

@@ -1,5 +1,6 @@
 package com.healthcaremanagement.repository;
 
+import com.healthcaremanagement.model.Doctor;
 import com.healthcaremanagement.model.Office;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -19,10 +20,20 @@ public class OfficeRepositoryImpl {
 
 
     public void createOffice(Office office) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        session.persist(office);
-        session.getTransaction().commit();
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+
+            // Ensure the doctor is managed
+            Doctor managedDoctor = session.get(Doctor.class, office.getDoctor().getDoctorId());
+            if (managedDoctor == null) {
+                throw new IllegalArgumentException("Doctor with ID " + office.getDoctor().getDoctorId() + " does not exist.");
+            }
+
+            office.setDoctor(managedDoctor); // Use the managed entity
+
+            session.persist(office);
+            transaction.commit();
+        }
     }
 
     public Office getOfficeById(int id) {
@@ -33,20 +44,21 @@ public class OfficeRepositoryImpl {
     }
 
     public void updateOffice(Office office) {
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        session.merge(office);
-        session.getTransaction().commit();
+        try (Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+
+            // Ensure the new doctor is managed (if changed)
+            if (office.getDoctor() != null) {
+                Doctor managedDoctor = session.get(Doctor.class, office.getDoctor().getDoctorId());
+                office.setDoctor(managedDoctor);
+            }
+
+            session.merge(office);
+            transaction.commit();
+        }
     }
 
     public void deleteOfficeById(int id) {
-//    Transaction transaction = null;
-//        Session session = sessionFactory.openSession();
-//transaction = session.beginTransaction();
-//        Office office = session.get(Office.class, id);
-//        session.merge(office);
-//        session.remove(office);
-//        transaction.commit();
 
             try (Session session = sessionFactory.openSession()) {
                 Transaction transaction = session.beginTransaction();

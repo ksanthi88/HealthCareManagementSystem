@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = "appointmentList")
+@ToString(exclude ={ "patients","appointmentList"})
 @EqualsAndHashCode(exclude = "appointmentList")
 @Table(name="Doctors")
 public class Doctor {
