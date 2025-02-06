@@ -143,10 +143,28 @@ public class OfficeServiceTestAll {
         assertNotNull(office, "Office should exist in the database.");
         assertNull(deletedOffice, "Office should not exist in the database.");
     }
-
+    @Test
+    @Order(5)
+public void testGetAllOffices() {
+    String uniqueEmail = "smith" + System.currentTimeMillis() + "@example.com";
+        Doctor doctor = new Doctor();
+        doctor.setFirstName("Dr. Smith");
+        doctor.setLastName("Smith");
+        doctor.setSpecialty("Cardiology");
+        doctor.setEmail(uniqueEmail);
+        doctorService.createDoctor(doctor);
+        Office office = new Office();
+        office.setLocation("Lakeville");
+        office.setPhone("123-456-7890");
+        office.setDoctor(doctor);
+        officeService.createOffice(office);
+        Office fetchedOffice = officeService.getOfficeById(office.getOfficeId());
+        assertNotNull(fetchedOffice, "Office should exist in the database.");
+        assertEquals("Lakeville", fetchedOffice.getLocation());
+}
     @ParameterizedTest
     @ValueSource(strings = {"Houston", "Boston", "Seattle", "San Diego"})
-    @Order(5)
+    @Order(6)
     public void testCreateOfficeWithDifferentLocations(String location) {
         String uniqueEmail = "greg.house" + System.currentTimeMillis() + "@example.com"; // Unique email
 
