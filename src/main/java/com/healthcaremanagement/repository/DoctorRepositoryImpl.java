@@ -1,6 +1,7 @@
 package com.healthcaremanagement.repository;
 
 import com.healthcaremanagement.model.Doctor;
+import com.healthcaremanagement.model.Office;
 import com.healthcaremanagement.model.Patient;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -11,8 +12,10 @@ import java.util.List;
 public class DoctorRepositoryImpl {
     private  final SessionFactory sessionFactory;
 
-    public DoctorRepositoryImpl(SessionFactory sessionFactory) {
+    public DoctorRepositoryImpl(SessionFactory sessionFactory ){
+
         this.sessionFactory = sessionFactory;
+
     }
 //Create doctor
     public void createDoctor(Doctor doctor) {
@@ -39,13 +42,51 @@ public class DoctorRepositoryImpl {
         }
     }
     //Delete Doctor
+//    public void deleteDoctorById(int id) {
+//        try (Session session = sessionFactory.openSession()) {
+//            Transaction transaction = session.beginTransaction();
+//
+//            Doctor doctor = session.get(Doctor.class, id);
+//
+//            if (doctor == null) {
+//                transaction.rollback();
+//                return;
+//            }
+//
+//            // Remove references from related tables
+//            if (doctor.getOffice() != null) {
+//                Office office = doctor.getOffice();
+//                office.setDoctor(null);
+//                session.merge(office);
+//            }
+//
+//            for (Patient patient : doctor.getPatients()) {
+//                patient.getDoctors().remove(doctor);
+//                session.merge(patient);
+//            }
+//
+//            session.remove(doctor);
+//            transaction.commit();
+//        }
+//    }
     public void deleteDoctorById(int id) {
         try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
             Doctor doctor = session.get(Doctor.class, id);
-            session.remove(doctor);
+
+            if (doctor != null) {
+
+                if (doctor.getOffice() != null) {
+                    doctor.getOffice().setDoctor(null);
+                    session.merge(doctor.getOffice());
+                }
+
+                session.remove(doctor);
+            }
+
             transaction.commit();
         }
+
     }
     //listing all doctors
     public List<Doctor> getAllDoctors() {

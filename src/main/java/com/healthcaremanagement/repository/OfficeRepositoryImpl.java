@@ -10,9 +10,13 @@ import java.util.List;
 public class OfficeRepositoryImpl {
     private final SessionFactory sessionFactory;
 
+
     public OfficeRepositoryImpl(SessionFactory sessionFactory) {
+
         this.sessionFactory = sessionFactory;
+
     }
+
 
     public void createOffice(Office office) {
         Session session = sessionFactory.openSession();

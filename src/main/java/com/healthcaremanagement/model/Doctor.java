@@ -31,12 +31,14 @@ public class Doctor {
    @OneToMany(mappedBy = "doctor",cascade = CascadeType.ALL,orphanRemoval = true)//one doctor having multiple appointments
  private List<Appointment> appointmentList= new ArrayList<>();
 
-    @OneToOne(mappedBy = "doctor",cascade = CascadeType.ALL)
-private Office office;
+    @OneToOne(mappedBy = "doctor", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Office office;
 
-   @ManyToMany(cascade ={ CascadeType.PERSIST}, fetch = FetchType.LAZY)
-   @JoinTable(schema ="healthcareManagementTwoDB",
-           joinColumns = @JoinColumn(name = "DoctorId"),
-           inverseJoinColumns = @JoinColumn(name="PatientID"))
+    @ManyToMany(cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "Doctor_Patient",
+            joinColumns = @JoinColumn(name = "DoctorID"),
+            inverseJoinColumns = @JoinColumn(name = "PatientID")
+    )
    private List<Patient> patients;
 }
